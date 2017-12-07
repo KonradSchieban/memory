@@ -23,3 +23,9 @@ body{
 .tile-spacing{
     margin-right:20px;
 }
+
+.tile-image{
+    width:100%;
+    height:100%;
+    border-radius: 10px;
+}

@@ -1,6 +1,21 @@
 var tileModel = {
     turned: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    backgroundColors: ["green","blue","green","red","red","yellow","white","black","orange","white","black","brown","yellow","blue","brown","orange"],
+    backgroundImages: ["images/1.jpg",
+                       "images/2.jpg",
+                       "images/3.jpg",
+                       "images/4.jpg",
+                       "images/5.jpg",
+                       "images/6.jpg",
+                       "images/7.jpg",
+                       "images/8.jpg",
+                       "images/1.jpg",
+                       "images/2.jpg",
+                       "images/3.jpg",
+                       "images/4.jpg",
+                       "images/5.jpg",
+                       "images/6.jpg",
+                       "images/7.jpg",
+                       "images/8.jpg"],
     isFirstAttempt: true,
     lastTurnedIndex: -1,
     isLocked: false,
@@ -27,7 +42,7 @@ var viewController = {
             tileModel.lastTurnedIndex = tileIndex;
         }else{
             
-            if(tileModel.backgroundColors[tileIndex] === tileModel.backgroundColors[tileModel.lastTurnedIndex]){
+            if(tileModel.backgroundImages[tileIndex] === tileModel.backgroundImages[tileModel.lastTurnedIndex]){
                 console.log("match!");
                 tileModel.lastTurnedIndex = tileIndex;
             }else{
@@ -45,22 +60,26 @@ var viewController = {
         if(viewController.checkWon()){
             setTimeout(function(){
                 alert("Congratulations!");
-            },1000);
+            },700);
         }
 
         tileModel.isFirstAttempt = !tileModel.isFirstAttempt;
         
     },
+
     render: function(){
         let tiles = document.getElementsByClassName("tile");
         for(let tileIndex = 0; tileIndex < tiles.length; tileIndex++){
             if(tileModel.turned[tileIndex] === 1){
-                tiles[tileIndex].style.backgroundColor = tileModel.backgroundColors[tileIndex];
+                tiles[tileIndex].getElementsByTagName("img")[0].src = tileModel.backgroundImages[tileIndex];
+
+                console.log("setting image: " + tileModel.backgroundImages[tileIndex]);
             }else{
-                tiles[tileIndex].style.backgroundColor = "";
+                tiles[tileIndex].getElementsByTagName("img")[0].src = "";
             }
         }
     },
+    
     checkWon: function(){
         let hasWon = true;
         for(let i = 0; i < tileModel.turned.length; i++){
