@@ -19,9 +19,21 @@ var tileModel = {
     isFirstAttempt: true,
     lastTurnedIndex: -1,
     isLocked: false,
+    
+    
 }
 
 var viewController = {
+    init: function(){
+        viewController.shuffleImages();
+    },
+    shuffleImages: function(){
+        for (let i = tileModel.backgroundImages.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [tileModel.backgroundImages[i], tileModel.backgroundImages[j]] = [tileModel.backgroundImages[j], tileModel.backgroundImages[i]];
+        }
+        return tileModel.backgroundImages;
+    },
     clickTile: function(tileIndex){
         if(tileModel.isLocked){
             console.log("locked!")
@@ -79,7 +91,7 @@ var viewController = {
             }
         }
     },
-    
+
     checkWon: function(){
         let hasWon = true;
         for(let i = 0; i < tileModel.turned.length; i++){
