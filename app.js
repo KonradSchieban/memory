@@ -19,8 +19,6 @@ var tileModel = {
     isFirstAttempt: true,
     lastTurnedIndex: -1,
     isLocked: false,
-    
-    
 }
 
 var viewController = {
@@ -104,6 +102,7 @@ var viewController = {
     }
 }
 
+viewController.init();
 
 document.addEventListener("DOMContentLoaded", function() {
     let tiles = document.getElementsByClassName("tile");
