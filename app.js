@@ -19,6 +19,7 @@ var tileModel = {
     isFirstAttempt: true,
     lastTurnedIndex: -1,
     isLocked: false,
+    numberOfTries: 0,
 }
 
 var viewController = {
@@ -48,8 +49,8 @@ var viewController = {
 
         if(tileModel.isFirstAttempt){
             console.log("first attempt.");
-            
             tileModel.lastTurnedIndex = tileIndex;
+            tileModel.numberOfTries++;
         }else{
             
             if(tileModel.backgroundImages[tileIndex] === tileModel.backgroundImages[tileModel.lastTurnedIndex]){
@@ -82,12 +83,11 @@ var viewController = {
         for(let tileIndex = 0; tileIndex < tiles.length; tileIndex++){
             if(tileModel.turned[tileIndex] === 1){
                 tiles[tileIndex].getElementsByTagName("img")[0].src = tileModel.backgroundImages[tileIndex];
-
-                console.log("setting image: " + tileModel.backgroundImages[tileIndex]);
             }else{
                 tiles[tileIndex].getElementsByTagName("img")[0].src = "";
             }
         }
+        document.getElementById("tries-p").innerHTML = "Number of tries: " + tileModel.numberOfTries;
     },
 
     checkWon: function(){
@@ -111,4 +111,14 @@ document.addEventListener("DOMContentLoaded", function() {
             viewController.clickTile(tileIndex);
         });
     }
+
+    var seconds = 0;
+    var el = document.getElementById('time-p');
+    
+    function incrementSeconds() {
+        seconds += 1;
+        el.innerHTML = "Elapsed Time: " + seconds + "s";
+    }
+    var cancel = setInterval(incrementSeconds, 1000);
 });
+
