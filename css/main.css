@@ -17,6 +17,7 @@ body{
     float:left;
     background-color:#ccc;
     margin-bottom:20px;
+    border-radius: 10px;
 }
 
 .tile-spacing{

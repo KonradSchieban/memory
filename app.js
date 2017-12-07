@@ -1,48 +1,54 @@
 var tileModel = {
     turned: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     backgroundColors: ["green","blue","green","red","red","yellow","white","black","orange","white","black","brown","yellow","blue","brown","orange"],
-    isFirstAttempt: function(){
-        let sum = 0;
-        for(let i = 0; i < tileModel.turned.length; i++){
-            sum += tileModel.turned[i];
-        }
-        return sum % 2 === 0;
-    },
+    isFirstAttempt: true,
     lastTurnedIndex: -1,
+    isLocked: false,
 }
 
 var viewController = {
     clickTile: function(tileIndex){
-        if(tileModel.isFirstAttempt()){
-            console.log("first attempt.");
-            tileModel.turned[tileIndex] = 1;
-            viewController.render();
-            tileModel.lastTurnedIndex = tileIndex;
-        }else{
-            if(tileIndex === tileModel.lastTurnedIndex){
-                console.log("Clicked same tile twice! Skipping this click...");
-            }else{
-                if(tileModel.backgroundColors[tileIndex] === tileModel.backgroundColors[tileModel.lastTurnedIndex]){
-                    console.log("match!");
-                    tileModel.turned[tileIndex] = 1;
-                    viewController.render();
-                    tileModel.lastTurnedIndex = tileIndex;
-                }else{
-                    tileModel.turned[tileIndex] = 1;
-                    viewController.render();
-                    setTimeout(function(){
-                        console.log("no match...");
-                        console.log("tile " + tileModel.lastTurnedIndex);
-                        tileModel.turned[tileIndex] = 0;
-                        tileModel.turned[tileModel.lastTurnedIndex] = 0;
-                        console.log("Actual value: " + tileModel.turned[tileModel.lastTurnedIndex]);
-                        viewController.render();
-                        tileModel.lastTurnedIndex = tileIndex;
-                    },1000);
-                }
-            }
+        if(tileModel.isLocked){
+            console.log("locked!")
+            return;
+        }
+
+        if(tileIndex === tileModel.lastTurnedIndex){
+            console.log("Clicked same tile twice! Skipping this click...");
+            return;
         }
         
+        tileModel.turned[tileIndex] = 1;
+        viewController.render();
+
+        if(tileModel.isFirstAttempt){
+            console.log("first attempt.");
+            
+            tileModel.lastTurnedIndex = tileIndex;
+        }else{
+            
+            if(tileModel.backgroundColors[tileIndex] === tileModel.backgroundColors[tileModel.lastTurnedIndex]){
+                console.log("match!");
+                tileModel.lastTurnedIndex = tileIndex;
+            }else{
+                tileModel.isLocked = true;
+                setTimeout(function(){
+                    console.log("no match...");
+                    tileModel.turned[tileIndex] = 0;
+                    tileModel.turned[tileModel.lastTurnedIndex] = 0;
+                    viewController.render();
+                    tileModel.isLocked = false;
+                },1000);
+            }
+        }
+
+        if(viewController.checkWon()){
+            setTimeout(function(){
+                alert("Congratulations!");
+            },1000);
+        }
+
+        tileModel.isFirstAttempt = !tileModel.isFirstAttempt;
         
     },
     render: function(){
@@ -54,6 +60,16 @@ var viewController = {
                 tiles[tileIndex].style.backgroundColor = "";
             }
         }
+    },
+    checkWon: function(){
+        let hasWon = true;
+        for(let i = 0; i < tileModel.turned.length; i++){
+            if(tileModel.turned[i] === 0){
+                hasWon = false;
+                break;
+            }
+        }
+        return hasWon;
     }
 }
 
